@@ -1,6 +1,7 @@
-import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, OnModuleInit, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { CreateUserRequest, USER_SERVICE_NAME, User, UserServiceClient } from 'src/users/user.pb';
+import { Observable } from 'rxjs';
+import { CreateUserRequest, FindOneResponse, USER_SERVICE_NAME, User, UserServiceClient } from 'src/users/user.pb';
 
 @Controller('users')
 export class UsersController implements OnModuleInit {
@@ -16,5 +17,10 @@ export class UsersController implements OnModuleInit {
   @Post()
   createUser(@Body() payload: CreateUserRequest) {
     return this.svc.createUser(payload);
+  }
+
+  @Get('/:id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.svc.findOne({id});
   }
 }

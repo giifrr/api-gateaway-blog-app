@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: api_gateaway_dev
+    image: api_gateaway_dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - 8080:3000
+      - 9229:9229
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  # Nest js app docker config for production
+  prod:
+      container_name: api_gateaway_prod
+      image: api_gateaway_prod:1.0.0
+      build:
+          context: .
+          target: production
+          dockerfile: ./Dockerfile
+      command: npm run start:prod
+      ports:
+          - 8080:3000
+          - 9229:9229
+      volumes:
+          - .:/usr/src/app
+          - /usr/src/app/node_modules
+      restart: unless-stopped
